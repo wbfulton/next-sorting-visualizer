@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { bubbleSortGenerator } from "../algos/bubbleSort";
 import { ChartData } from "../types";
 import { createRandomArray } from "../utils";
+import { Button } from "./button";
 import {
   Card,
   CardContent,
@@ -68,25 +69,29 @@ export const SortingChart = () => {
         <CardDescription>Space: O(1)</CardDescription>
       </CardHeader>
       <CardContent>
-        <button className="p-2 m-2" onClick={createNewArray}>
-          New Array
-        </button>
-        <button
-          className="p-2 m-2"
-          onClick={() => {
-            if (!gen) return;
-            const nextVal = gen.next().value;
-            if (nextVal !== undefined) {
-              setData(nextVal.value);
-              setStepExplainer(nextVal?.description ?? "");
-            }
-          }}
-        >
-          Next
-        </button>
-        <CardDescription className="h-10 p-2 m-2">
-          {stepExplainer}
-        </CardDescription>
+        <div className="flex items-center gap-2 justify-between mb-2">
+          <CardDescription className="py-2 basis-2/4">
+            {stepExplainer}
+          </CardDescription>
+          <div className="basis-2/4 flex items-center gap-2 justify-end">
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                if (!gen) return;
+                const nextVal = gen.next().value;
+                if (nextVal !== undefined) {
+                  setData(nextVal.value);
+                  setStepExplainer(nextVal?.description ?? "");
+                }
+              }}
+            >
+              Next Step
+            </Button>
+            <Button variant={"outline"} onClick={createNewArray}>
+              Reset
+            </Button>
+          </div>
+        </div>
 
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={data}>
