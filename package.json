@@ -9,18 +9,38 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lucide-react": "^0.400.0",
+    "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "recharts": "^2.14.0"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
+    "src/**/*.{ts,tsx}": "eslint",
+    "express/**/*.{ts,tsx}": "eslint"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
+    "clsx": "^2.1.1",
+    "eslint": "^9.14.0",
+    "eslint-config-next": "^15.0.3",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8",
+    "prettier": "^3.4.1",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.3"
+    "typescript": "^5",
+    "typescript-eslint": "^8.17.0"
   }
 }
