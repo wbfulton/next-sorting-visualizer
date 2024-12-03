@@ -1,4 +1,4 @@
-import { ChartData } from "../types";
+import { ChartData, GeneratorData } from "../types";
 
 /**
  * Bubble Sort repeatedly swaps adjacent elements if they are in wrong order.
@@ -8,17 +8,9 @@ import { ChartData } from "../types";
  * This function wil return a new array
  * @time O(N^2) worst case, O(N) best case
  */
-export function* bubbleSortGenerator(data: ChartData[]): Generator<
-  {
-    value: ChartData[];
-    description?: string;
-  },
-  {
-    value: ChartData[];
-    description?: string;
-  },
-  unknown
-> {
+export function* bubbleSortGenerator(
+  data: ChartData[]
+): Generator<GeneratorData, GeneratorData, unknown> {
   const arr = [...data];
 
   for (let i = 0; i < arr.length - 1; i++) {

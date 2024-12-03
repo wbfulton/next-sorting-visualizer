@@ -3,3 +3,8 @@ export interface ChartData {
   value: number;
   fill?: string;
 }
+
+export interface GeneratorData {
+  value: ChartData[];
+  description?: string;
+}

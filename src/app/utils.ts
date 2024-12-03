@@ -14,7 +14,7 @@ export function createRandomArray(length: number, max: number) {
   const arr: ChartData[] = [];
   for (let i = 0; i < length; i++) {
     const int = getRandomInt(max);
-    arr.push({ label: `${int}`, value: int, fill: "white" });
+    arr.push({ label: `${int}`, value: int });
   }
   return arr;
 }
