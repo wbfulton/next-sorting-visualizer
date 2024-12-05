@@ -38,8 +38,8 @@ const chartConfig: {
     label: "Selected",
     color: "red",
   },
-  inSubGroup: {
-    label: "In Sub Group",
+  tracked: {
+    label: "Tracked",
     color: "blue",
   },
 } satisfies ChartConfig;
@@ -52,6 +52,10 @@ const items: ComboBoxItem[] = [
   {
     label: "Cycle Sort",
     value: Algos.CYCLE_SORT,
+  },
+  {
+    label: "Selection Sort",
+    value: Algos.SELECTION_SORT,
   },
 ];
 

@@ -8,6 +8,10 @@ import {
   cycleSortGenerator,
   cycleSortMetadata,
 } from "./algos/comparasion/cycleSort";
+import {
+  selectionSortGenerator,
+  selectionSortMetadata,
+} from "./algos/comparasion/selectionSort";
 import { AlgoInfo, Algos, ChartData } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -40,6 +44,13 @@ const info: Array<[Algos, AlgoInfo]> = [
     {
       generatorFunction: cycleSortGenerator,
       metadata: cycleSortMetadata,
+    },
+  ],
+  [
+    Algos.SELECTION_SORT,
+    {
+      generatorFunction: selectionSortGenerator,
+      metadata: selectionSortMetadata,
     },
   ],
 ];

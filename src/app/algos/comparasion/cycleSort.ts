@@ -158,5 +158,5 @@ export function* cycleSortGenerator(
     sortedIndicies.add(cycleStart);
   }
 
-  return { value: data };
+  return { value: data.map((val) => ({ ...val, fill: "green" })) };
 }

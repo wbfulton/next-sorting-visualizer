@@ -1,6 +1,7 @@
 export enum Algos {
   BUBBLE_SORT = "bubbleSort",
   CYCLE_SORT = "cycleSort",
+  SELECTION_SORT = "selectionSort",
 }
 
 export enum BIG_O {
