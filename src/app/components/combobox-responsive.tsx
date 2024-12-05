@@ -23,15 +23,21 @@ export type ComboBoxItem = {
 export const ComboBoxResponsive = ({
   defaultText,
   items,
+  onSelectItems,
 }: {
   defaultText: string;
   items: ComboBoxItem[];
+  onSelectItems?: (item: ComboBoxItem | null) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [selectedItems, setSelectedItems] = React.useState<ComboBoxItem | null>(
     null
   );
+
+  React.useEffect(() => {
+    onSelectItems?.(selectedItems);
+  }, [selectedItems]);
 
   if (isDesktop) {
     return (

@@ -1,4 +1,14 @@
-import { ChartData, GeneratorData } from "../types";
+import { Algos, BIG_O, ChartData, GeneratorData, Metadata } from "@/app/types";
+
+export const bubbleSortMetadata: Metadata = {
+  algo: Algos.BUBBLE_SORT,
+  time: BIG_O.SQUARED,
+  space: BIG_O.CONSTANT,
+  description: [
+    "Bubble Sort is the simplest sorting algorithm that works by repeatedly swapping the adjacent elements if they are in the wrong order.",
+    "This algorithm is not suitable for large data sets as its average and worst-case time complexity are quite high.",
+  ],
+};
 
 /**
  * Bubble Sort repeatedly swaps adjacent elements if they are in wrong order.
@@ -12,6 +22,7 @@ export function* bubbleSortGenerator(
   data: ChartData[]
 ): Generator<GeneratorData, GeneratorData, unknown> {
   const arr = [...data];
+  const sortedIndicies = new Set<number>([]);
 
   for (let i = 0; i < arr.length - 1; i++) {
     let swapped = false;
@@ -20,12 +31,15 @@ export function* bubbleSortGenerator(
       // show compare
       yield {
         value: arr.map((val, idx) => {
+          if (sortedIndicies.has(idx)) {
+            return { ...val, fill: "green" };
+          }
           if (idx === j || idx === j + 1) {
             return { ...val, fill: "red" };
           }
           return val;
         }),
-        description: `Check if ${arr[j].value} and ${arr[j + 1].value} is in order`,
+        description: `Checking if ${arr[j].value} < ${arr[j + 1].value}`,
       };
       if (arr[j].value > arr[j + 1].value) {
         const temp = arr[j];
@@ -35,20 +49,29 @@ export function* bubbleSortGenerator(
         // show swap
         yield {
           value: arr.map((val, idx) => {
+            if (sortedIndicies.has(idx)) {
+              return { ...val, fill: "green" };
+            }
             if (idx === j || idx === j + 1) {
               return { ...val, fill: "red" };
             }
+
             return val;
           }),
-          description: `Swapping ${arr[j].value} and ${arr[j + 1].value}`,
+          description: `Yes, ${arr[j].value} < ${arr[j + 1].value}. Swapping ${arr[j].value} and ${arr[j + 1].value}`,
         };
       }
     }
 
+    sortedIndicies.add(arr.length - 1 - i);
     if (swapped === false) {
       break;
     }
   }
 
-  return { value: arr };
+  return {
+    value: arr.map((val) => {
+      return { ...val, fill: "green" };
+    }),
+  };
 }

@@ -1,6 +1,14 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { ChartData } from "./types";
+import {
+  bubbleSortGenerator,
+  bubbleSortMetadata,
+} from "./algos/comparasion/bubbleSort";
+import {
+  cycleSortGenerator,
+  cycleSortMetadata,
+} from "./algos/comparasion/cycleSort";
+import { AlgoInfo, Algos, ChartData } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,3 +26,22 @@ export function createRandomArray(length: number, max: number) {
   }
   return arr;
 }
+
+const info: Array<[Algos, AlgoInfo]> = [
+  [
+    Algos.BUBBLE_SORT,
+    {
+      generatorFunction: bubbleSortGenerator,
+      metadata: bubbleSortMetadata,
+    },
+  ],
+  [
+    Algos.CYCLE_SORT,
+    {
+      generatorFunction: cycleSortGenerator,
+      metadata: cycleSortMetadata,
+    },
+  ],
+];
+
+export const algorithmInfo = new Map<Algos, AlgoInfo>(info);
