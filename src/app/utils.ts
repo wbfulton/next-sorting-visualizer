@@ -9,6 +9,10 @@ import {
   cycleSortMetadata,
 } from "./algos/comparasion/cycleSort";
 import {
+  heapSortGenerator,
+  heapSortMetadata,
+} from "./algos/comparasion/heapSort";
+import {
   selectionSortGenerator,
   selectionSortMetadata,
 } from "./algos/comparasion/selectionSort";
@@ -51,6 +55,13 @@ const info: Array<[Algos, AlgoInfo]> = [
     {
       generatorFunction: selectionSortGenerator,
       metadata: selectionSortMetadata,
+    },
+  ],
+  [
+    Algos.HEAP_SORT,
+    {
+      generatorFunction: heapSortGenerator,
+      metadata: heapSortMetadata,
     },
   ],
 ];

@@ -8,6 +8,7 @@ export const cycleSortMetadata: Metadata = {
     "Cycle sort is an in-place, unstable sorting algorithm that is particularly useful when sorting arrays containing elements with a small range of values.",
     "Basic idea is that we loop through the array and don't move on until the correct item is at the current location",
   ],
+  link: "https://www.geeksforgeeks.org/cycle-sort/",
 };
 
 /**

@@ -57,6 +57,10 @@ const items: ComboBoxItem[] = [
     label: "Selection Sort",
     value: Algos.SELECTION_SORT,
   },
+  {
+    label: "Heap Sort",
+    value: Algos.HEAP_SORT,
+  },
 ];
 
 export const SortingChart = () => {
@@ -71,6 +75,7 @@ export const SortingChart = () => {
     return () => {
       const randArr = createRandomArray(15, 20);
       setGen(info?.generatorFunction(randArr));
+      setStepExplainer("");
       setData(randArr);
     };
   }, [info]);
@@ -122,7 +127,7 @@ export const SortingChart = () => {
           </div>
         </div>
         <div className="flex items-center gap-2 justify-between mb-2">
-          <CardDescription className="basis-2/4">
+          <CardDescription className="basis-2/4 h-10">
             {stepExplainer}
           </CardDescription>
           <div className="basis-2/4 flex items-center gap-2 justify-end">

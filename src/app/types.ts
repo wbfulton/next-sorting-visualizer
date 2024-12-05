@@ -2,13 +2,15 @@ export enum Algos {
   BUBBLE_SORT = "bubbleSort",
   CYCLE_SORT = "cycleSort",
   SELECTION_SORT = "selectionSort",
+  HEAP_SORT = "heapSort",
 }
 
 export enum BIG_O {
   SQUARED = "O(N^2)",
   LINEAR = "O(N)",
   CONSTANT = "O(1)",
-  LOGARITHMIC = "O(log(N))",
+  LOG = "O( log(N) )",
+  N_LOG = "O( N * log(N) )",
 }
 
 export interface Metadata {

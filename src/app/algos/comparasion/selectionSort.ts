@@ -7,6 +7,7 @@ export const selectionSortMetadata: Metadata = {
   description: [
     "Selection sort sorts an array by repeatedly selecting the smallest (or largest) element from the unsorted portion and swapping it with the first unsorted element. This process continues until the entire array is sorted.",
   ],
+  link: "https://www.geeksforgeeks.org/selection-sort-algorithm-2/",
 };
 
 export function* selectionSortGenerator(
