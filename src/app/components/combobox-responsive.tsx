@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { Check } from "lucide-react";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Button } from "./button";
 import {
@@ -22,36 +23,39 @@ export type ComboBoxItem = {
 
 export const ComboBoxResponsive = ({
   defaultText,
+  defaultSelectedItem,
   items,
-  onSelectItems,
+  onSelectItem,
 }: {
   defaultText: string;
+  defaultSelectedItem?: ComboBoxItem;
   items: ComboBoxItem[];
-  onSelectItems?: (item: ComboBoxItem | null) => void;
+  onSelectItem?: (item: ComboBoxItem | undefined) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [selectedItems, setSelectedItems] = React.useState<ComboBoxItem | null>(
-    null
-  );
+  const [selectedItem, setSelectedItem] = React.useState<
+    ComboBoxItem | undefined
+  >(defaultSelectedItem);
 
   React.useEffect(() => {
-    onSelectItems?.(selectedItems);
-  }, [selectedItems]);
+    onSelectItem?.(selectedItem);
+  }, [selectedItem]);
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[150px] justify-start">
-            {selectedItems ? <>{selectedItems.label}</> : <>{defaultText}</>}
+            {selectedItem ? <>{selectedItem.label}</> : <>{defaultText}</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
           <ItemsList
+            selectedItem={selectedItem}
             items={items}
             setOpen={setOpen}
-            setSelectedItems={setSelectedItems}
+            setSelectedItem={setSelectedItem}
           />
         </PopoverContent>
       </Popover>
@@ -62,15 +66,16 @@ export const ComboBoxResponsive = ({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-[150px] justify-start">
-          {selectedItems ? <>{selectedItems.label}</> : <>{defaultText}</>}
+          {selectedItem ? <>{selectedItem.label}</> : <>{defaultText}</>}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
           <ItemsList
+            selectedItem={selectedItem}
             items={items}
             setOpen={setOpen}
-            setSelectedItems={setSelectedItems}
+            setSelectedItem={setSelectedItem}
           />
         </div>
       </DrawerContent>
@@ -81,11 +86,13 @@ export const ComboBoxResponsive = ({
 function ItemsList({
   items,
   setOpen,
-  setSelectedItems,
+  setSelectedItem,
+  selectedItem,
 }: {
+  selectedItem?: ComboBoxItem;
   items: ComboBoxItem[];
   setOpen: (open: boolean) => void;
-  setSelectedItems: (items: ComboBoxItem | null) => void;
+  setSelectedItem: (items: ComboBoxItem | undefined) => void;
 }) {
   return (
     <Command>
@@ -98,13 +105,14 @@ function ItemsList({
               key={item.value}
               value={item.value}
               onSelect={(value) => {
-                setSelectedItems(
-                  items.find((item) => item.value === value) || null
+                setSelectedItem(
+                  items.find((item) => item.value === value) || undefined
                 );
                 setOpen(false);
               }}
             >
               {item.label}
+              {selectedItem?.value === item.value && <Check />}
             </CommandItem>
           ))}
         </CommandGroup>

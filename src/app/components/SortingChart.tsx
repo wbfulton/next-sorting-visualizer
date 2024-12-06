@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AlgoInfo, Algos, BIG_O, ChartData, GeneratorData } from "../types";
 import { algorithmInfo, cn, createRandomArray } from "../utils";
 import { Button } from "./button";
@@ -65,7 +65,12 @@ const items: ComboBoxItem[] = [
 
 export const SortingChart = () => {
   const [data, setData] = useState<ChartData[]>([]);
+  const prevData = useRef<GeneratorData[]>([]);
+  const prevDataAux = useRef<GeneratorData[]>([]);
+  const wasLastDirectionForward = useRef<boolean>(true);
+
   const [stepExplainer, setStepExplainer] = useState<string>("");
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 
   const [gen, setGen] =
     useState<Generator<GeneratorData, GeneratorData, unknown>>();
@@ -75,14 +80,28 @@ export const SortingChart = () => {
     return () => {
       const randArr = createRandomArray(15, 20);
       setGen(info?.generatorFunction(randArr));
-      setStepExplainer("");
       setData(randArr);
+
+      prevData.current = [{ value: randArr }];
+      prevDataAux.current = [];
+
+      if (stepExplainer) {
+        setStepExplainer("");
+      }
+      if (intervalId) {
+        setIntervalId(undefined);
+      }
     };
   }, [info]);
 
   useEffect(() => {
     createNewArray();
   }, [info]);
+
+  // init to bubble sort
+  useEffect(() => {
+    setInfo(algorithmInfo.get(Algos.BUBBLE_SORT));
+  }, []);
 
   return (
     <Card className="sm:w-2/3 md:w-1/2 min-w-min">
@@ -91,7 +110,11 @@ export const SortingChart = () => {
         <div className="flex items-center gap-2 justify-start mb-2">
           <CardDescription>
             <ComboBoxResponsive
-              onSelectItems={(item) => {
+              // default to bubble sort
+              defaultSelectedItem={items.find(
+                (item) => item.value === Algos.BUBBLE_SORT
+              )}
+              onSelectItem={(item) => {
                 if (item) {
                   setInfo(algorithmInfo.get(item.value as Algos));
                 } else {
@@ -131,20 +154,122 @@ export const SortingChart = () => {
             {stepExplainer}
           </CardDescription>
           <div className="basis-2/4 flex items-center gap-2 justify-end">
+            {/* Back Button */}
             <Button
+              disabled={!data || !info || prevData.current?.length === 0}
+              size={"sm"}
+              variant={"outline"}
+              onClick={() => {
+                if (prevData.current.length > 0) {
+                  if (wasLastDirectionForward.current) {
+                    const val = prevData.current.pop();
+                    if (val) {
+                      prevDataAux.current.push(val);
+                    }
+                  }
+
+                  const val = prevData.current.pop();
+                  if (val) {
+                    prevDataAux.current.push(val);
+                    setData(val.value);
+                    setStepExplainer(val.description ?? "");
+                  }
+                }
+
+                wasLastDirectionForward.current = false;
+              }}
+            >
+              Back
+            </Button>
+            {/* Step Button */}
+            <Button
+              disabled={!data || !info}
               size={"sm"}
               variant={"outline"}
               onClick={() => {
                 if (!gen) return;
-                const nextVal = gen.next().value;
-                if (nextVal !== undefined) {
-                  setData(nextVal.value);
-                  setStepExplainer(nextVal?.description ?? "");
+
+                if (prevDataAux.current.length > 0) {
+                  if (!wasLastDirectionForward.current) {
+                    const val = prevDataAux.current.pop();
+                    if (val) {
+                      prevData.current.push(val);
+                    }
+                  }
+                  const val = prevDataAux.current.pop();
+                  if (val) {
+                    prevData.current.push(val);
+                    setData(val.value);
+                    setStepExplainer(val.description ?? "");
+                  }
+                } else {
+                  const nextVal = gen.next().value;
+                  if (nextVal !== undefined) {
+                    prevData.current?.push(nextVal);
+                    setData(nextVal.value);
+                    setStepExplainer(nextVal?.description ?? "");
+                    if (intervalId) {
+                      setIntervalId(undefined);
+                    }
+                  }
+                }
+
+                wasLastDirectionForward.current = true;
+              }}
+            >
+              Step
+            </Button>
+            {/* Auto Button */}
+            <Button
+              disabled={!data || !info}
+              size={"sm"}
+              variant={"outline"}
+              onClick={() => {
+                if (!gen) return;
+
+                if (intervalId) {
+                  clearInterval(intervalId);
+                  setIntervalId(undefined);
+                } else {
+                  const id = setInterval(() => {
+                    if (prevDataAux.current.length > 0) {
+                      if (!wasLastDirectionForward.current) {
+                        const val = prevDataAux.current.pop();
+                        if (val) {
+                          prevData.current.push(val);
+                        }
+                      }
+
+                      const val = prevDataAux.current.pop();
+                      if (val) {
+                        prevData.current.push(val);
+                        setData(val.value);
+                        setStepExplainer(val.description ?? "");
+                      }
+                    } else {
+                      const nextVal = gen.next().value;
+                      if (nextVal !== undefined) {
+                        prevData.current?.push(nextVal);
+                        setData(nextVal.value);
+                        setStepExplainer(nextVal?.description ?? "");
+                        if (intervalId) {
+                          setIntervalId(undefined);
+                        }
+                      } else {
+                        clearInterval(id);
+                      }
+                    }
+
+                    wasLastDirectionForward.current = true;
+                  }, 1000);
+
+                  setIntervalId(id);
                 }
               }}
             >
-              Next Step
+              {intervalId ? "Stop" : "Auto"}
             </Button>
+            {/* Reset Button */}
             <Button size={"sm"} variant={"outline"} onClick={createNewArray}>
               Reset
             </Button>
