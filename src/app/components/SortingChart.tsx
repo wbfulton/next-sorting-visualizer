@@ -89,6 +89,7 @@ export const SortingChart = () => {
         setStepExplainer("");
       }
       if (intervalId) {
+        clearInterval(intervalId);
         setIntervalId(undefined);
       }
     };
